@@ -13,3 +13,17 @@ def read_header_info_(filename):
         gslib_file.readline()
         number_of_variables = int(gslib_file.readline().strip().split()[0])
         return number_of_variables, [gslib_file.readline().strip().split()[0] for line_number in range(number_of_variables)]
+
+def write_to_gslib(df, filename):
+    write_header_info_(df, filename)
+    with open(filename, 'a') as gslib_file:
+        df.to_csv(gslib_file, header=False, sep=' ', index=False)
+    return
+
+
+def write_header_info_(df, filename):
+    with open(filename, 'w') as gslib_file:
+        gslib_file.write("Created by pygslib package\n")
+        gslib_file.write(str(len(df.columns))+'\n')
+        for column_name in df.columns:
+            gslib_file.write(str(column_name)+'\n')
